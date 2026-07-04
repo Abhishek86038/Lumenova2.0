@@ -106,3 +106,4 @@
 [2026-07-04T17:37:02] - chore: update tailwind config configurations
 [2026-07-04T17:38:02] - fix: update contract address mapping for local sandbox
 [2026-07-04T17:39:02] - style: increase contrast of metrics descriptions in dark mode
+[2026-07-04T17:40:02] - feat: add user-facing toast notifications for donation status
