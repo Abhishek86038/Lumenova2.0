@@ -178,3 +178,4 @@
 [2026-07-04T18:49:15] - feat: support dynamic switching of rpc node endpoints
 [2026-07-04T18:50:15] - fix: resolve variable scope conflict inside fetchEvents
 [2026-07-04T18:51:15] - docs: add user walkthrough manual for testnet wallets
+[2026-07-04T18:52:16] - chore: update dependency lock files to match latest
