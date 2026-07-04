@@ -169,3 +169,4 @@
 [2026-07-04T18:40:13] - fix: prevent empty donation submissions during transaction build
 [2026-07-04T18:41:14] - docs: format api documentation table in smart contract notes
 [2026-07-04T18:42:14] - chore: build test artifacts locally to test outputs
+[2026-07-04T18:43:14] - style: adjust header action buttons layout gaps
