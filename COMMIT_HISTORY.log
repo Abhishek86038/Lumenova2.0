@@ -174,3 +174,4 @@
 [2026-07-04T18:45:14] - fix: handle ledger sequence gaps during event polling loops
 [2026-07-04T18:46:15] - perf: simplify rendering conditions for empty activity feeds
 [2026-07-04T18:47:15] - refactor: move build folder artifacts to root gitignore
+[2026-07-04T18:48:15] - style: refine transition ease properties on active buttons
