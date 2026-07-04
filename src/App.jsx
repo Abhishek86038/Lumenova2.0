@@ -25,7 +25,6 @@ function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
 
   const startLedgerRef = useRef(null);
-  const cursorRef = useRef(null);
 
   const fetchEvents = async () => {
     try {
@@ -36,14 +35,14 @@ function App() {
       }
 
       const eventsRes = await server.getEvents({
-        startLedger: cursorRef.current ? undefined : startLedgerRef.current,
+        startLedger: startLedgerRef.current,
         filters: [
           {
             type: 'contract',
             contractIds: [CONTRACT_ID],
           }
         ],
-        pagination: cursorRef.current ? { cursor: cursorRef.current } : undefined
+        pagination: { limit: 1000 }
       });
 
       if (eventsRes && eventsRes.events) {
@@ -82,17 +81,13 @@ function App() {
               timestamp: evt.ledgerClosedAt || new Date().toISOString()
             });
           }
-          // Always update paging cursor to the latest event's paging token
-          cursorRef.current = evt.pagingToken;
         }
 
         if (newDonations.length > 0) {
-          setDonations(prev => {
-            const combined = [...newDonations, ...prev];
-            return combined
-              .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
-              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-          });
+          const sorted = newDonations.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          setDonations(sorted);
+        } else {
+          setDonations([]);
         }
       }
     } catch (e) {
