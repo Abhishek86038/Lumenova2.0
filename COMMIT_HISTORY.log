@@ -126,3 +126,4 @@
 [2026-07-04T17:57:05] - refactor: clean up React state initialization
 [2026-07-04T17:58:06] - style: apply Space Grotesk display fonts to header titles
 [2026-07-04T17:59:06] - feat: display sync status indicator during ledger check
+[2026-07-04T18:00:06] - fix: prevent event polling when component unmounts
