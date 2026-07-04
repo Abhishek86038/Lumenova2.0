@@ -104,3 +104,4 @@
 [2026-07-04T17:35:01] - refactor: separate utilities into modular helper functions
 [2026-07-04T17:36:01] - test: add mock tests for contract state validation
 [2026-07-04T17:37:02] - chore: update tailwind config configurations
+[2026-07-04T17:38:02] - fix: update contract address mapping for local sandbox
