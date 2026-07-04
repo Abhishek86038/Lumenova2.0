@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { StellarWalletsKit } from '@creit.tech/stellar-wallets-kit/sdk';
 import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
 import { Networks } from '@creit.tech/stellar-wallets-kit/types';
@@ -23,104 +23,107 @@ function App() {
   const [campaign, setCampaign] = useState({ goal: 0, raised: 0 });
   const [donations, setDonations] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [refreshTrigger, setRefreshTrigger] = useState(0);
+
+  const startLedgerRef = useRef(null);
+  const cursorRef = useRef(null);
+
+  const fetchEvents = async () => {
+    try {
+      if (!startLedgerRef.current) {
+        const latest = await server.getLatestLedger();
+        // Go back 10,000 ledgers (approx 12-14 hours) to fetch historical donations
+        startLedgerRef.current = Math.max(1, latest.sequence - 10000);
+      }
+
+      const eventsRes = await server.getEvents({
+        startLedger: cursorRef.current ? undefined : startLedgerRef.current,
+        filters: [
+          {
+            type: 'contract',
+            contractIds: [CONTRACT_ID],
+          }
+        ],
+        pagination: cursorRef.current ? { cursor: cursorRef.current } : undefined
+      });
+
+      if (eventsRes && eventsRes.events) {
+        const newDonations = [];
+        for (let evt of eventsRes.events) {
+          // Decode the topics and values directly using scValToNative
+          let parsedTopic0 = '';
+          let donorAddress = '';
+          let amount = 0;
+          try {
+            if (evt.topic && evt.topic[0]) {
+              parsedTopic0 = scValToNative(evt.topic[0]);
+            }
+            if (evt.topic && evt.topic[1]) {
+              donorAddress = scValToNative(evt.topic[1]);
+            }
+            if (evt.value) {
+              const val = scValToNative(evt.value);
+              if (Array.isArray(val)) {
+                amount = Number(val[0]);
+              } else if (val && typeof val === 'object') {
+                amount = val.amount ? Number(val.amount) : 0;
+              } else {
+                amount = Number(val);
+              }
+            }
+          } catch (err) {
+            console.error("Error decoding event:", err);
+          }
+
+          if (parsedTopic0 === 'donate' && donorAddress) {
+            newDonations.push({
+              id: evt.id,
+              donor: donorAddress,
+              amount: amount,
+              timestamp: evt.ledgerClosedAt || new Date().toISOString()
+            });
+          }
+          // Always update paging cursor to the latest event's paging token
+          cursorRef.current = evt.pagingToken;
+        }
+
+        if (newDonations.length > 0) {
+          setDonations(prev => {
+            const combined = [...newDonations, ...prev];
+            return combined
+              .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
+              .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          });
+        }
+      }
+    } catch (e) {
+      console.error("Event fetch error:", e);
+    }
+  };
 
   useEffect(() => {
     loadCampaignState();
-    
-    // Listen for events via Soroban RPC
-    let isMounted = true;
-    let startLedgerSequence = null;
-    let pagingCursor = null;
-    
-    const fetchEvents = async () => {
-      try {
-        if (!startLedgerSequence) {
-          const latest = await server.getLatestLedger();
-          // Go back 10,000 ledgers (approx 12-14 hours) to fetch historical donations
-          startLedgerSequence = Math.max(1, latest.sequence - 10000);
-        }
-
-        const eventsRes = await server.getEvents({
-          startLedger: pagingCursor ? undefined : startLedgerSequence,
-          filters: [
-            {
-              type: 'contract',
-              contractIds: [CONTRACT_ID],
-            }
-          ],
-          pagination: pagingCursor ? { cursor: pagingCursor } : undefined
-        });
-
-        if (eventsRes && eventsRes.events) {
-          const newDonations = [];
-          for (let evt of eventsRes.events) {
-            // Decode the topics and values directly using scValToNative
-            let parsedTopic0 = '';
-            let donorAddress = '';
-            let amount = 0;
-            try {
-              if (evt.topic && evt.topic[0]) {
-                parsedTopic0 = scValToNative(evt.topic[0]);
-              }
-              if (evt.topic && evt.topic[1]) {
-                donorAddress = scValToNative(evt.topic[1]);
-              }
-              if (evt.value) {
-                const val = scValToNative(evt.value);
-                if (Array.isArray(val)) {
-                  amount = Number(val[0]);
-                } else if (val && typeof val === 'object') {
-                  amount = val.amount ? Number(val.amount) : 0;
-                } else {
-                  amount = Number(val);
-                }
-              }
-            } catch (err) {
-              console.error("Error decoding event:", err);
-            }
-
-            if (parsedTopic0 === 'donate' && donorAddress) {
-              newDonations.push({
-                id: evt.id,
-                donor: donorAddress,
-                amount: amount,
-                timestamp: evt.ledgerClosedAt || new Date().toISOString()
-              });
-            }
-            // Always update paging cursor to the latest event's paging token
-            pagingCursor = evt.pagingToken;
-          }
-          
-          if (newDonations.length > 0 && isMounted) {
-            setDonations(prev => {
-              const combined = [...newDonations, ...prev];
-              return combined
-                .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
-                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-            });
-            loadCampaignState(); // Refresh total when new event arrives
-          }
-        }
-      } catch (e) {
-        console.error("Event fetch error:", e);
-      }
-      
-      if (isMounted) {
-        setTimeout(fetchEvents, 5000);
-      }
-    };
-    
     fetchEvents();
-    
-    return () => { isMounted = false; };
-  }, [refreshTrigger]);
+
+    // Set up standard 4-second polling interval for events
+    const interval = setInterval(fetchEvents, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const loadCampaignState = async () => {
     setIsRefreshing(true);
     const state = await fetchContractState();
     setCampaign(state);
     setIsRefreshing(false);
+  };
+
+  const handleDonationSuccess = async () => {
+    // 1. Immediately refresh campaign goal & raised stats
+    await loadCampaignState();
+    // 2. Poll events immediately, then schedule another one 1.5 seconds later (allowing ledger indexing to finalize)
+    await fetchEvents();
+    setTimeout(async () => {
+      await fetchEvents();
+    }, 1500);
   };
 
   const handleConnect = async (walletId) => {
@@ -186,7 +189,7 @@ function App() {
             
             <DonateForm 
               pubKey={pubKey} 
-              onDonationSuccess={() => setRefreshTrigger(prev => prev + 1)} 
+              onDonationSuccess={handleDonationSuccess} 
               onConnectClick={() => setIsModalOpen(true)}
             />
           </div>
