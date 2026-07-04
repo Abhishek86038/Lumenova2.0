@@ -164,3 +164,4 @@
 [2026-07-04T18:35:13] - fix: correct network passphrases in transaction builder
 [2026-07-04T18:36:13] - perf: defer loading of non-critical svg elements
 [2026-07-04T18:37:13] - refactor: update app title and meta tags for SEO metadata
+[2026-07-04T18:38:13] - style: set custom scrollbar styling in donation listings
