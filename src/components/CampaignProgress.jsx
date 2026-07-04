@@ -28,7 +28,7 @@ export default function CampaignProgress({ goal, raised, isRefreshing }) {
             <span className="text-gray-400">Progress</span>
             <span className="font-medium text-white">{progressPercent.toFixed(1)}%</span>
           </div>
-          <div className="w-full bg-dark-900 rounded-full h-3 overflow-hidden border border-dark-700">
+          <div className="w-full bg-slate-900 rounded-full h-3 overflow-hidden border border-slate-700">
             <div 
               className="bg-gradient-to-r from-primary-600 to-purple-500 h-3 rounded-full transition-all duration-1000 ease-out"
               style={{ width: `${progressPercent}%` }}
@@ -37,7 +37,7 @@ export default function CampaignProgress({ goal, raised, isRefreshing }) {
         </div>
 
         <div className="grid grid-cols-2 gap-4">
-          <div className="bg-dark-900 p-4 rounded-lg border border-dark-700">
+          <div className="bg-slate-900 p-4 rounded-lg border border-slate-700">
             <div className="text-sm text-gray-400 mb-1 flex items-center gap-1">
               <TrendingUp size={14} /> Raised
             </div>
@@ -45,7 +45,7 @@ export default function CampaignProgress({ goal, raised, isRefreshing }) {
               {raisedXlm.toLocaleString(undefined, { maximumFractionDigits: 2 })} <span className="text-sm text-gray-400 font-normal">XLM</span>
             </div>
           </div>
-          <div className="bg-dark-900 p-4 rounded-lg border border-dark-700">
+          <div className="bg-slate-900 p-4 rounded-lg border border-slate-700">
             <div className="text-sm text-gray-400 mb-1 flex items-center gap-1">
               <Target size={14} /> Goal
             </div>

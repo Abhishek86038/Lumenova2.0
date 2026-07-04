@@ -100,7 +100,7 @@ function App() {
         </h1>
         
         {pubKey ? (
-          <div className="flex items-center gap-4 bg-dark-800 rounded-full py-2 px-4 border border-dark-700">
+          <div className="flex items-center gap-4 bg-slate-800 rounded-full py-2 px-4 border border-slate-700">
             <span className="text-sm font-mono text-gray-300">
               {pubKey.substring(0, 4)}...{pubKey.substring(pubKey.length - 4)}
             </span>

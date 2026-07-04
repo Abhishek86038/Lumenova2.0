@@ -26,7 +26,7 @@ export default function WalletModal({ isOpen, onClose, onConnect }) {
             <button
               key={wallet.id}
               onClick={() => onConnect(wallet.id)}
-              className="w-full flex items-center justify-between p-4 rounded-lg bg-dark-900 border border-dark-700 hover:border-primary-500 hover:bg-dark-700 transition-all duration-200 group"
+              className="w-full flex items-center justify-between p-4 rounded-lg bg-slate-900 border border-slate-700 hover:border-primary-500 hover:bg-slate-700 transition-all duration-200 group"
             >
               <div className="flex items-center gap-3">
                 <span className="text-2xl">{wallet.icon}</span>

@@ -22,7 +22,7 @@ export default function DonationFeed({ donations }) {
             return (
               <div 
                 key={donation.id} 
-                className="bg-dark-900 p-4 rounded-lg border border-dark-700 animate-in fade-in slide-in-from-top-4"
+                className="bg-slate-900 p-4 rounded-lg border border-slate-700 animate-in fade-in slide-in-from-top-4"
               >
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-2">
