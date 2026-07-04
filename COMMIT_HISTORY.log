@@ -112,3 +112,4 @@
 [2026-07-04T17:43:03] - fix: prevent dual triggering of click handler in DonateForm
 [2026-07-04T17:44:03] - style: align header items across standard viewports
 [2026-07-04T17:45:03] - perf: implement local state caching for event pagination
+[2026-07-04T17:46:03] - chore: clean up deprecated helper functions in wallet client
