@@ -131,3 +131,4 @@
 [2026-07-04T18:02:06] - chore: update postcss and vite dev dependencies
 [2026-07-04T18:03:07] - style: adjust metrics box flex constraints for medium layouts
 [2026-07-04T18:04:07] - feat: add ledger close timer tracker on status widget
+[2026-07-04T18:05:07] - fix: handle user wallet rejection promise rejections
