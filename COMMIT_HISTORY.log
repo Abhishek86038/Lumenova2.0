@@ -171,3 +171,4 @@
 [2026-07-04T18:42:14] - chore: build test artifacts locally to test outputs
 [2026-07-04T18:43:14] - style: adjust header action buttons layout gaps
 [2026-07-04T18:44:14] - feat: add simulated estimation display inside donate box
+[2026-07-04T18:45:14] - fix: handle ledger sequence gaps during event polling loops
