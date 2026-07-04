@@ -120,3 +120,4 @@
 [2026-07-04T17:51:04] - docs: add architectural layout overview to contract docs
 [2026-07-04T17:52:04] - chore: prune unused dependencies from package.json
 [2026-07-04T17:53:05] - style: enhance neon glow pulse effects on active states
+[2026-07-04T17:54:05] - feat: add live status indicators on network status panel
