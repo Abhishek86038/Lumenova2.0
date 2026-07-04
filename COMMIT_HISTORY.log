@@ -95,3 +95,4 @@
 [2026-07-04T19:00:52] - docs: add post-deployment sanity checklist
 [2026-07-04T17:27:00] - refactor: optimize contract storage utilization
 [2026-07-04T17:28:00] - style: update dashboard layout constraints
+[2026-07-04T17:29:00] - feat: add support for wallet connect callback logs
