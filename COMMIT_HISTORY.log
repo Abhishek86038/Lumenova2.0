@@ -184,3 +184,4 @@
 [2026-07-04T18:55:16] - fix: handle zero-donation campaigns state rendering
 [2026-07-04T18:56:16] - perf: reuse single Horizon server instance for resource saves
 [2026-07-04T18:57:17] - refactor: consolidate import statements in App.jsx
+[2026-07-04T18:58:17] - style: align text alignments inside CampaignProgress detail blocks
