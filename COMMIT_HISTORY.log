@@ -122,3 +122,4 @@
 [2026-07-04T17:53:05] - style: enhance neon glow pulse effects on active states
 [2026-07-04T17:54:05] - feat: add live status indicators on network status panel
 [2026-07-04T17:55:05] - fix: resolve edge-case where donor address decoding fails
+[2026-07-04T17:56:05] - perf: improve background orb animation paint times
