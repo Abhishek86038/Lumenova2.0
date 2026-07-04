@@ -166,3 +166,4 @@
 [2026-07-04T18:37:13] - refactor: update app title and meta tags for SEO metadata
 [2026-07-04T18:38:13] - style: set custom scrollbar styling in donation listings
 [2026-07-04T18:39:13] - feat: add interactive confetti trigger on donation goal reached
+[2026-07-04T18:40:13] - fix: prevent empty donation submissions during transaction build
