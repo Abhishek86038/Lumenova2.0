@@ -139,3 +139,4 @@
 [2026-07-04T18:10:08] - fix: set initial raised balance state from simulated call
 [2026-07-04T18:11:08] - docs: add troubleshooting steps for Freighter wallet users
 [2026-07-04T18:12:08] - chore: configure build output chunks optimization
+[2026-07-04T18:13:08] - style: increase font weight of raised metrics values
