@@ -162,3 +162,4 @@
 [2026-07-04T18:33:12] - style: refine border colors in disabled input states
 [2026-07-04T18:34:12] - feat: show conversion tooltip for XLM to Stroop ratio
 [2026-07-04T18:35:13] - fix: correct network passphrases in transaction builder
+[2026-07-04T18:36:13] - perf: defer loading of non-critical svg elements
