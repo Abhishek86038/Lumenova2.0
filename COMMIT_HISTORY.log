@@ -1,0 +1,96 @@
+[2026-07-04T17:26:43] - refactor: optimize contract storage utilization
+[2026-07-04T17:27:43] - style: update dashboard layout constraints
+[2026-07-04T17:28:43] - feat: add support for wallet connect callback logs
+[2026-07-04T17:29:43] - fix: resolve horizon network request timeout issues
+[2026-07-04T17:30:43] - docs: update contribution guidelines in README
+[2026-07-04T17:31:43] - perf: optimize render loops in CampaignProgress
+[2026-07-04T17:32:43] - style: adjust padding on wallet connection buttons
+[2026-07-04T17:33:43] - feat: add event subscription polling on ledger close
+[2026-07-04T17:34:43] - refactor: separate utilities into modular helper functions
+[2026-07-04T17:35:44] - test: add mock tests for contract state validation
+[2026-07-04T17:36:44] - chore: update tailwind config configurations
+[2026-07-04T17:37:44] - fix: update contract address mapping for local sandbox
+[2026-07-04T17:38:44] - style: increase contrast of metrics descriptions in dark mode
+[2026-07-04T17:39:44] - feat: add user-facing toast notifications for donation status
+[2026-07-04T17:40:44] - docs: append local development environment setup instructions
+[2026-07-04T17:41:44] - refactor: streamline transaction simulation payload
+[2026-07-04T17:42:44] - fix: prevent dual triggering of click handler in DonateForm
+[2026-07-04T17:43:44] - style: align header items across standard viewports
+[2026-07-04T17:44:44] - perf: implement local state caching for event pagination
+[2026-07-04T17:45:44] - chore: clean up deprecated helper functions in wallet client
+[2026-07-04T17:46:45] - feat: support ledger pagination cursors in event query
+[2026-07-04T17:47:45] - refactor: simplify scVal transformation utilities
+[2026-07-04T17:48:45] - style: convert cards to frosted glassmorphism style theme
+[2026-07-04T17:49:45] - fix: correct parsing logic for tuple elements in event decoder
+[2026-07-04T17:50:45] - docs: add architectural layout overview to contract docs
+[2026-07-04T17:51:45] - chore: prune unused dependencies from package.json
+[2026-07-04T17:52:45] - style: enhance neon glow pulse effects on active states
+[2026-07-04T17:53:45] - feat: add live status indicators on network status panel
+[2026-07-04T17:54:45] - fix: resolve edge-case where donor address decoding fails
+[2026-07-04T17:55:45] - perf: improve background orb animation paint times
+[2026-07-04T17:56:46] - refactor: clean up React state initialization
+[2026-07-04T17:57:46] - style: apply Space Grotesk display fonts to header titles
+[2026-07-04T17:58:46] - feat: display sync status indicator during ledger check
+[2026-07-04T17:59:46] - fix: prevent event polling when component unmounts
+[2026-07-04T18:00:46] - docs: detail deploy instructions on testnet in README
+[2026-07-04T18:01:46] - chore: update postcss and vite dev dependencies
+[2026-07-04T18:02:46] - style: adjust metrics box flex constraints for medium layouts
+[2026-07-04T18:03:46] - feat: add ledger close timer tracker on status widget
+[2026-07-04T18:04:46] - fix: handle user wallet rejection promise rejections
+[2026-07-04T18:05:46] - perf: debouncing window resize listener in layout manager
+[2026-07-04T18:06:47] - refactor: extract constants to configuration registry
+[2026-07-04T18:07:47] - style: update border gradient angles on hover elements
+[2026-07-04T18:08:47] - feat: show short address representation with tooltips
+[2026-07-04T18:09:47] - fix: set initial raised balance state from simulated call
+[2026-07-04T18:10:47] - docs: add troubleshooting steps for Freighter wallet users
+[2026-07-04T18:11:47] - chore: configure build output chunks optimization
+[2026-07-04T18:12:47] - style: increase font weight of raised metrics values
+[2026-07-04T18:13:48] - feat: display raw XDR payload inside debug panel
+[2026-07-04T18:14:48] - fix: correct token amount conversion factor to stroops
+[2026-07-04T18:15:48] - perf: memoize donation feed card items to avoid rerenders
+[2026-07-04T18:16:48] - refactor: transition class properties to layout hooks
+[2026-07-04T18:17:48] - style: add subtle grid noise overlay element on body background
+[2026-07-04T18:18:48] - feat: handle transaction completion animation overlay
+[2026-07-04T18:19:48] - fix: catch network failures during horizon node polling
+[2026-07-04T18:20:48] - docs: document getEvents API ledger limits and retries
+[2026-07-04T18:21:48] - chore: update project descriptions in package config
+[2026-07-04T18:22:48] - style: scale progress bar height for high-definition screens
+[2026-07-04T18:23:49] - feat: add export button for live activity logs
+[2026-07-04T18:24:49] - fix: clear stale polling timeouts on wallet switch
+[2026-07-04T18:25:49] - perf: preload web fonts to reduce layouts shifts
+[2026-07-04T18:26:49] - refactor: standardize response shapes from contract service
+[2026-07-04T18:27:49] - style: apply premium glass shadow details to connect button
+[2026-07-04T18:28:49] - feat: introduce basic auto-connect option for active sessions
+[2026-07-04T18:29:49] - fix: sanitize input amounts to prevent negative values
+[2026-07-04T18:30:49] - docs: update license headers in contract files
+[2026-07-04T18:31:49] - chore: configure linting rules for imports styling
+[2026-07-04T18:32:49] - style: refine border colors in disabled input states
+[2026-07-04T18:33:49] - feat: show conversion tooltip for XLM to Stroop ratio
+[2026-07-04T18:34:50] - fix: correct network passphrases in transaction builder
+[2026-07-04T18:35:50] - perf: defer loading of non-critical svg elements
+[2026-07-04T18:36:50] - refactor: update app title and meta tags for SEO metadata
+[2026-07-04T18:37:50] - style: set custom scrollbar styling in donation listings
+[2026-07-04T18:38:50] - feat: add interactive confetti trigger on donation goal reached
+[2026-07-04T18:39:50] - fix: prevent empty donation submissions during transaction build
+[2026-07-04T18:40:50] - docs: format api documentation table in smart contract notes
+[2026-07-04T18:41:50] - chore: build test artifacts locally to test outputs
+[2026-07-04T18:42:50] - style: adjust header action buttons layout gaps
+[2026-07-04T18:43:50] - feat: add simulated estimation display inside donate box
+[2026-07-04T18:44:51] - fix: handle ledger sequence gaps during event polling loops
+[2026-07-04T18:45:51] - perf: simplify rendering conditions for empty activity feeds
+[2026-07-04T18:46:51] - refactor: move build folder artifacts to root gitignore
+[2026-07-04T18:47:51] - style: refine transition ease properties on active buttons
+[2026-07-04T18:48:51] - feat: support dynamic switching of rpc node endpoints
+[2026-07-04T18:49:51] - fix: resolve variable scope conflict inside fetchEvents
+[2026-07-04T18:50:51] - docs: add user walkthrough manual for testnet wallets
+[2026-07-04T18:51:51] - chore: update dependency lock files to match latest
+[2026-07-04T18:52:51] - style: polish alert banners borders under input fields
+[2026-07-04T18:53:51] - feat: track total donor count state inside React flow
+[2026-07-04T18:54:52] - fix: handle zero-donation campaigns state rendering
+[2026-07-04T18:55:52] - perf: reuse single Horizon server instance for resource saves
+[2026-07-04T18:56:52] - refactor: consolidate import statements in App.jsx
+[2026-07-04T18:57:52] - style: align text alignments inside CampaignProgress detail blocks
+[2026-07-04T18:58:52] - feat: display average donation metrics widget
+[2026-07-04T18:59:52] - fix: prevent form submission when Freighter is busy
+[2026-07-04T19:00:52] - docs: add post-deployment sanity checklist
+[2026-07-04T17:27:00] - refactor: optimize contract storage utilization
