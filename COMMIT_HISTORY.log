@@ -159,3 +159,4 @@
 [2026-07-04T18:30:12] - fix: sanitize input amounts to prevent negative values
 [2026-07-04T18:31:12] - docs: update license headers in contract files
 [2026-07-04T18:32:12] - chore: configure linting rules for imports styling
+[2026-07-04T18:33:12] - style: refine border colors in disabled input states
