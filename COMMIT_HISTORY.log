@@ -115,3 +115,4 @@
 [2026-07-04T17:46:03] - chore: clean up deprecated helper functions in wallet client
 [2026-07-04T17:47:03] - feat: support ledger pagination cursors in event query
 [2026-07-04T17:48:04] - refactor: simplify scVal transformation utilities
+[2026-07-04T17:49:04] - style: convert cards to frosted glassmorphism style theme
