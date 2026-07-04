@@ -186,3 +186,4 @@
 [2026-07-04T18:57:17] - refactor: consolidate import statements in App.jsx
 [2026-07-04T18:58:17] - style: align text alignments inside CampaignProgress detail blocks
 [2026-07-04T18:59:17] - feat: display average donation metrics widget
+[2026-07-04T19:00:17] - fix: prevent form submission when Freighter is busy
