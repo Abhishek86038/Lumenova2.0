@@ -1,6 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap');
 @import "tailwindcss";
 
 @theme {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Space Grotesk', sans-serif;
   --color-primary-50: #f5f3ff;
   --color-primary-100: #ede9fe;
   --color-primary-500: #8b5cf6;
@@ -9,19 +12,79 @@
 }
 
 body {
-  @apply bg-slate-900 text-white font-sans antialiased;
+  @apply bg-[#0A0E27] text-white font-sans antialiased;
 }
 
 .btn-primary {
-  @apply bg-primary-600 hover:bg-primary-500 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply bg-gradient-to-r from-[#00B4D8] to-[#8B5CF6] text-white font-bold py-3 px-6 rounded-2xl transition-all duration-300 hover:shadow-[0_0_20px_rgba(0,180,216,0.4)] hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:shadow-none disabled:hover:translate-y-0;
 }
 
 .card {
-  @apply bg-slate-800 rounded-xl p-6 shadow-xl border border-slate-700;
+  position: relative;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border-radius: 24px;
+  box-shadow: 0 0 25px rgba(0, 180, 216, 0.12);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  padding: 1px;
+  background: linear-gradient(135deg, rgba(0, 180, 216, 0.4), rgba(139, 92, 246, 0.4));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.8;
+  transition: opacity 0.4s ease, background 0.4s ease;
+}
+
+.card:hover::before {
+  opacity: 1;
+  background: linear-gradient(135deg, #00B4D8, #8B5CF6);
+}
+
+.card:hover {
+  box-shadow: 0 0 35px rgba(0, 180, 216, 0.22);
+  transform: translateY(-4px);
 }
 
 .input-field {
-  @apply bg-slate-900 border border-slate-700 text-white rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 outline-none transition-all duration-200;
+  @apply bg-slate-900/80 border border-slate-700/60 text-white rounded-xl focus:ring-2 focus:ring-cyan-400 focus:border-cyan-400 block w-full p-3 outline-none transition-all duration-200;
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-float-delayed {
+  animation: float 6s ease-in-out infinite;
+  animation-delay: 2.5s;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer-progress {
+  background: linear-gradient(90deg, #00B4D8, #8B5CF6, #00B4D8);
+  background-size: 200% 100%;
+  animation: shimmer 3s linear infinite;
+  box-shadow: 0 0 15px rgba(0, 180, 216, 0.5);
 }
 
 .custom-scrollbar::-webkit-scrollbar {

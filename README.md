@@ -34,12 +34,13 @@ The application implements real-time visual progress updates by listening to con
 ## 4. Smart Contract Details
 - **Contract Name:** `crowdfunding-contract`
 - **Functions:**
-  - `initialize(owner: Address, goal: i128)`: Sets the campaign owner and funding target (in stroops).
-  - `donate(donor: Address, amount: i128)`: Logs a donation, increases the total raised, and emits the `donate` event.
+  - `initialize(owner: Address, token: Address, goal: i128)`: Sets the campaign owner, native token address, and funding target (in stroops).
+  - `donate(donor: Address, amount: i128)`: Transfers native XLM from the donor to the contract escrow, updates the total raised, and emits the `donate` event.
+  - `withdraw()`: Transfers all accumulated native XLM tokens from the contract escrow to the campaign owner's wallet.
   - `get_total_raised() -> i128`: Returns the total amount of stroops contributed.
   - `get_goal() -> i128`: Returns the target goal amount in stroops.
-- **Deployed Contract ID:** `CBGPFHFBUHJ6QKWXTTUWRDC47PO6JIL6PN33HN7VQIDN5DOAHW4VQKOB`
-- **Stellar.Expert Link:** [View Contract on Stellar.Expert](https://stellar.expert/explorer/testnet/contract/CBGPFHFBUHJ6QKWXTTUWRDC47PO6JIL6PN33HN7VQIDN5DOAHW4VQKOB)
+- **Deployed Contract ID:** `CAKVP6WJITLBTZOCGL4JEEKYWPYDT7EXREE6EM27WJV6Y7WTWNVCCYXS`
+- **Stellar.Expert Link:** [View Contract on Stellar.Expert](https://stellar.expert/explorer/testnet/contract/CAKVP6WJITLBTZOCGL4JEEKYWPYDT7EXREE6EM27WJV6Y7WTWNVCCYXS)
 
 ---
 
@@ -67,7 +68,7 @@ The application implements real-time visual progress updates by listening to con
 3. **Configure Environment (Optional):**
    *Create a `.env` file in the root directory (the app falls back to the default testnet contract if left unset):*
    ```env
-   VITE_CONTRACT_ID=CBGPFHFBUHJ6QKWXTTUWRDC47PO6JIL6PN33HN7VQIDN5DOAHW4VQKOB
+   VITE_CONTRACT_ID=CAKVP6WJITLBTZOCGL4JEEKYWPYDT7EXREE6EM27WJV6Y7WTWNVCCYXS
    VITE_RPC_URL=https://soroban-testnet.stellar.org
    ```
 
@@ -98,15 +99,15 @@ The application implements real-time visual progress updates by listening to con
 
 ## 9. Screenshots
 - **Wallet Connection Modal:**
-  ![Wallet Options](./screenshots/wallet-options.png)
+  ![Wallet Options](image.png)
 - **Campaign Dashboard & Progress Bar:**
-  ![Campaign Progress](./screenshots/campaign-progress.png)
+  ![Campaign Progress](image-1.png)
 - **Successful Donation Notification:**
-  ![Donation Success](./screenshots/donation-success.png)
-- **Live Donation Activity Feed:**
-  ![Live Donation Feed](./screenshots/live-feed.png)
+  ![Donation Success](image-2.png)
   
-> *Note: Screen mockups/images are placeholders and will be finalized after full end-to-end user acceptance testing.*
+  **Stellar Expert Verification:** [Verify Transaction on Stellar.Expert](https://stellar.expert/explorer/testnet/tx/d23a6b505041c008267a76a89ad2bbc06c2fa8a3e9d4736c79ed14425b10e6af)
+- **Live Donation Activity Feed:**
+  ![Live Donation Feed](image-3.png)
 
 ---
 

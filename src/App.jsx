@@ -1,16 +1,20 @@
 import { useState, useEffect } from 'react';
-import { StellarWalletsKit, WalletNetwork, allowAllModules } from '@creit.tech/stellar-wallets-kit';
-import { fetchContractState, submitDonation, checkTransactionStatus, server } from './services/contract';
+import { StellarWalletsKit } from '@creit.tech/stellar-wallets-kit/sdk';
+import { defaultModules } from '@creit.tech/stellar-wallets-kit/modules/utils';
+import { Networks } from '@creit.tech/stellar-wallets-kit/types';
+import { fetchContractState, submitDonation, checkTransactionStatus, server, CONTRACT_ID } from './services/contract';
 import WalletModal from './components/WalletModal';
 import CampaignProgress from './components/CampaignProgress';
 import DonateForm from './components/DonateForm';
 import DonationFeed from './components/DonationFeed';
 import { Wallet, LogOut } from 'lucide-react';
 
-const kit = new StellarWalletsKit({
-  network: WalletNetwork.TESTNET,
-  selectedWalletId: 'freighter',
-  modules: allowAllModules(),
+import { xdr, scValToNative } from '@stellar/stellar-sdk';
+
+// Initialize the static StellarWalletsKit class
+StellarWalletsKit.init({
+  modules: defaultModules(),
+  network: Networks.TESTNET,
 });
 
 function App() {
@@ -25,37 +29,75 @@ function App() {
     
     // Listen for events via Soroban RPC
     let isMounted = true;
-    let cursor = null;
+    let startLedgerSequence = null;
+    let pagingCursor = null;
     
     const fetchEvents = async () => {
       try {
+        if (!startLedgerSequence) {
+          const latest = await server.getLatestLedger();
+          // Go back 10,000 ledgers (approx 12-14 hours) to fetch historical donations
+          startLedgerSequence = Math.max(1, latest.sequence - 10000);
+        }
+
         const eventsRes = await server.getEvents({
-          startLedger: cursor ? cursor : undefined,
+          startLedger: pagingCursor ? undefined : startLedgerSequence,
           filters: [
             {
               type: 'contract',
-              contractIds: ['CBGPFHFBUHJ6QKWXTTUWRDC47PO6JIL6PN33HN7VQIDN5DOAHW4VQKOB'],
+              contractIds: [CONTRACT_ID],
             }
-          ]
+          ],
+          pagination: pagingCursor ? { cursor: pagingCursor } : undefined
         });
 
         if (eventsRes && eventsRes.events) {
           const newDonations = [];
           for (let evt of eventsRes.events) {
-            // Check if topic[0] is "donate"
-            if (evt.topic && evt.topic[0] && evt.topic[0].includes('donate')) {
+            // Decode the topics and values directly using scValToNative
+            let parsedTopic0 = '';
+            let donorAddress = '';
+            let amount = 0;
+            try {
+              if (evt.topic && evt.topic[0]) {
+                parsedTopic0 = scValToNative(evt.topic[0]);
+              }
+              if (evt.topic && evt.topic[1]) {
+                donorAddress = scValToNative(evt.topic[1]);
+              }
+              if (evt.value) {
+                const val = scValToNative(evt.value);
+                if (Array.isArray(val)) {
+                  amount = Number(val[0]);
+                } else if (val && typeof val === 'object') {
+                  amount = val.amount ? Number(val.amount) : 0;
+                } else {
+                  amount = Number(val);
+                }
+              }
+            } catch (err) {
+              console.error("Error decoding event:", err);
+            }
+
+            if (parsedTopic0 === 'donate' && donorAddress) {
               newDonations.push({
                 id: evt.id,
-                donor: evt.topic[1],
-                amount: evt.value?.amount ? Number(evt.value.amount) : 0,
+                donor: donorAddress,
+                amount: amount,
                 timestamp: evt.ledgerClosedAt || new Date().toISOString()
               });
-              cursor = evt.pagingToken;
             }
+            // Always update paging cursor to the latest event's paging token
+            pagingCursor = evt.pagingToken;
           }
           
           if (newDonations.length > 0 && isMounted) {
-            setDonations(prev => [...newDonations, ...prev].filter((v,i,a)=>a.findIndex(t=>(t.id===v.id))===i).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)));
+            setDonations(prev => {
+              const combined = [...newDonations, ...prev];
+              return combined
+                .filter((v, i, a) => a.findIndex(t => t.id === v.id) === i)
+                .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+            });
             loadCampaignState(); // Refresh total when new event arrives
           }
         }
@@ -82,72 +124,84 @@ function App() {
 
   const handleConnect = async (walletId) => {
     try {
-      kit.setWallet(walletId);
-      const publicKey = await kit.getPublicKey();
-      setPubKey(publicKey);
+      StellarWalletsKit.setWallet(walletId);
+      const { address } = await StellarWalletsKit.fetchAddress();
+      setPubKey(address);
       setIsModalOpen(false);
     } catch (e) {
       console.error(e);
-      alert("Failed to connect wallet: " + e.message);
+      alert("Failed to connect wallet: " + (e.message || JSON.stringify(e)));
     }
   };
 
   return (
-    <div className="min-h-screen p-8">
-      <header className="max-w-4xl mx-auto flex justify-between items-center mb-12">
-        <h1 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-purple-400">
-          Lumenova-L2
-        </h1>
-        
-        {pubKey ? (
-          <div className="flex items-center gap-4 bg-slate-800 rounded-full py-2 px-4 border border-slate-700">
-            <span className="text-sm font-mono text-gray-300">
-              {pubKey.substring(0, 4)}...{pubKey.substring(pubKey.length - 4)}
-            </span>
+    <div className="min-h-screen bg-[#0A0E27] p-8 relative overflow-hidden font-[Inter]">
+      {/* Glow Orbs - Premium background */}
+      <div className="absolute w-[600px] h-[600px] bg-cyan-500/20 blur-[200px] -top-40 -left-40 rounded-full animate-pulse pointer-events-none"></div>
+      <div className="absolute w-[600px] h-[600px] bg-purple-500/15 blur-[200px] -bottom-40 -right-40 rounded-full animate-pulse pointer-events-none"></div>
+
+      {/* Grain texture */}
+      <div className="absolute inset-0 opacity-[0.03] bg-[url('data:image/svg+xml,%3Csvg width=60 height=60 xmlns=http://www.w3.org/2000/svg%3E%3Cfilter id=n%3E%3CfeTurbulence type=fractalNoise baseFrequency=0.8 numOctaves=4/%3E%3C/filter%3E%3Crect width=100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E')] pointer-events-none"></div>
+
+      <div className="relative z-10 max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-10">
+          <h1 className="text-[32px] font-bold font-[Space_Grotesk] bg-gradient-to-r from-cyan-400 to-purple-500 bg-clip-text text-transparent">
+            Lumenova-L2
+          </h1>
+          {pubKey ? (
+            <div className="flex items-center gap-4 bg-slate-900/80 rounded-2xl py-2.5 px-5 border border-cyan-500/20 backdrop-blur-md shadow-lg shadow-cyan-500/5">
+              <span className="text-sm font-mono text-cyan-300">
+                {pubKey.substring(0, 4)}...{pubKey.substring(pubKey.length - 4)}
+              </span>
+              <button 
+                onClick={() => setPubKey('')}
+                className="text-gray-400 hover:text-white transition-colors cursor-pointer"
+                title="Disconnect"
+              >
+                <LogOut size={18} />
+              </button>
+            </div>
+          ) : (
             <button 
-              onClick={() => setPubKey('')}
-              className="text-gray-400 hover:text-white transition-colors"
-              title="Disconnect"
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-purple-600 text-white font-medium hover:shadow-lg hover:shadow-cyan-500/30 hover:-translate-y-[2px] transition-all cursor-pointer"
             >
-              <LogOut size={18} />
+              <Wallet size={18} />
+              Connect Wallet
             </button>
+          )}
+        </div>
+
+        {/* Main Grid - Asymmetric heights */}
+        <div className="grid grid-cols-3 gap-7">
+          {/* Left Column */}
+          <div className="flex flex-col gap-6">
+            <CampaignProgress 
+              goal={campaign.goal} 
+              raised={campaign.raised} 
+              isRefreshing={isRefreshing}
+            />
+            
+            <DonateForm 
+              pubKey={pubKey} 
+              onDonationSuccess={loadCampaignState} 
+              onConnectClick={() => setIsModalOpen(true)}
+            />
           </div>
-        ) : (
-          <button 
-            onClick={() => setIsModalOpen(true)}
-            className="btn-primary flex items-center gap-2 shadow-lg shadow-primary-500/20"
-          >
-            <Wallet size={18} />
-            Connect Wallet
-          </button>
-        )}
-      </header>
 
-      <main className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="space-y-8">
-          <CampaignProgress 
-            goal={campaign.goal} 
-            raised={campaign.raised} 
-            isRefreshing={isRefreshing}
-          />
-          
-          <DonateForm 
-            pubKey={pubKey} 
-            kit={kit} 
-            onDonationSuccess={loadCampaignState} 
-          />
+          {/* Right Column - Live Activity 500px */}
+          <div className="col-span-2">
+            <DonationFeed donations={donations} />
+          </div>
         </div>
-        
-        <div className="space-y-8">
-          <DonationFeed donations={donations} />
-        </div>
-      </main>
 
-      <WalletModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        onConnect={handleConnect} 
-      />
+        <WalletModal 
+          isOpen={isModalOpen} 
+          onClose={() => setIsModalOpen(false)} 
+          onConnect={handleConnect} 
+        />
+      </div>
     </div>
   );
 }

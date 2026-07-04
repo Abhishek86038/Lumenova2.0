@@ -1,11 +1,12 @@
-import { SorobanRpc, TransactionBuilder, Networks, Address, xdr, scValToNative, nativeToScVal } from '@stellar/stellar-sdk';
+import { rpc, TransactionBuilder, Networks, Address, Operation, xdr, scValToNative, nativeToScVal } from '@stellar/stellar-sdk';
+import { StellarWalletsKit } from '@creit.tech/stellar-wallets-kit/sdk';
 
 const rpcUrl = 'https://soroban-testnet.stellar.org';
-export const server = new SorobanRpc.Server(rpcUrl);
+export const server = new rpc.Server(rpcUrl);
 export const networkPassphrase = Networks.TESTNET;
 
 // Replace this with the actual deployed contract ID later
-export const CONTRACT_ID = 'CBGPFHFBUHJ6QKWXTTUWRDC47PO6JIL6PN33HN7VQIDN5DOAHW4VQKOB'; 
+export const CONTRACT_ID = 'CAKVP6WJITLBTZOCGL4JEEKYWPYDT7EXREE6EM27WJV6Y7WTWNVCCYXS'; 
 
 export async function fetchContractState() {
   if (CONTRACT_ID === 'TO_BE_REPLACED') {
@@ -19,8 +20,8 @@ export async function fetchContractState() {
         { fee: '100', networkPassphrase }
       )
         .addOperation(
-          xdr.Operation.invokeHostFunction({
-            hostFunction: xdr.HostFunction.hostFunctionTypeInvokeContract(
+          Operation.invokeHostFunction({
+            func: xdr.HostFunction.hostFunctionTypeInvokeContract(
               new xdr.InvokeContractArgs({
                 contractAddress: Address.fromString(CONTRACT_ID).toScAddress(),
                 functionName: 'get_goal',
@@ -40,8 +41,8 @@ export async function fetchContractState() {
         { fee: '100', networkPassphrase }
       )
         .addOperation(
-          xdr.Operation.invokeHostFunction({
-            hostFunction: xdr.HostFunction.hostFunctionTypeInvokeContract(
+          Operation.invokeHostFunction({
+            func: xdr.HostFunction.hostFunctionTypeInvokeContract(
               new xdr.InvokeContractArgs({
                 contractAddress: Address.fromString(CONTRACT_ID).toScAddress(),
                 functionName: 'get_total_raised',
@@ -68,13 +69,13 @@ export async function fetchContractState() {
   }
 }
 
-export async function submitDonation(walletKit, pubKey, amount) {
+export async function submitDonation(pubKey, amount) {
   try {
     const account = await server.getAccount(pubKey);
     let tx = new TransactionBuilder(account, { fee: '1000', networkPassphrase })
       .addOperation(
-        xdr.Operation.invokeHostFunction({
-          hostFunction: xdr.HostFunction.hostFunctionTypeInvokeContract(
+        Operation.invokeHostFunction({
+          func: xdr.HostFunction.hostFunctionTypeInvokeContract(
             new xdr.InvokeContractArgs({
               contractAddress: Address.fromString(CONTRACT_ID).toScAddress(),
               functionName: 'donate',
@@ -91,12 +92,12 @@ export async function submitDonation(walletKit, pubKey, amount) {
       .build();
 
     const preparedTx = await server.prepareTransaction(tx);
-    const signedXdr = await walletKit.signTransaction(preparedTx.toXDR(), {
+    const { signedTxXdr } = await StellarWalletsKit.signTransaction(preparedTx.toXDR(), {
       networkPassphrase,
-      accountToSign: pubKey,
+      address: pubKey,
     });
 
-    const signedTx = TransactionBuilder.fromXDR(signedXdr, networkPassphrase);
+    const signedTx = TransactionBuilder.fromXDR(signedTxXdr, networkPassphrase);
     
     const submitResponse = await server.sendTransaction(signedTx);
     if (submitResponse.status === "ERROR") {
@@ -113,7 +114,7 @@ export async function submitDonation(walletKit, pubKey, amount) {
 export async function checkTransactionStatus(txHash) {
   while (true) {
     const status = await server.getTransaction(txHash);
-    if (status.status !== SorobanRpc.Api.GetTransactionStatus.NOT_FOUND) {
+    if (status.status !== rpc.Api.GetTransactionStatus.NOT_FOUND) {
       return status;
     }
     await new Promise(resolve => setTimeout(resolve, 2000));
