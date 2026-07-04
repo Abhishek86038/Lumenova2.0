@@ -23,6 +23,7 @@ function App() {
   const [campaign, setCampaign] = useState({ goal: 0, raised: 0 });
   const [donations, setDonations] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [refreshTrigger, setRefreshTrigger] = useState(0);
 
   useEffect(() => {
     loadCampaignState();
@@ -113,7 +114,7 @@ function App() {
     fetchEvents();
     
     return () => { isMounted = false; };
-  }, []);
+  }, [refreshTrigger]);
 
   const loadCampaignState = async () => {
     setIsRefreshing(true);
@@ -185,7 +186,7 @@ function App() {
             
             <DonateForm 
               pubKey={pubKey} 
-              onDonationSuccess={loadCampaignState} 
+              onDonationSuccess={() => setRefreshTrigger(prev => prev + 1)} 
               onConnectClick={() => setIsModalOpen(true)}
             />
           </div>
