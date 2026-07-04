@@ -133,3 +133,4 @@
 [2026-07-04T18:04:07] - feat: add ledger close timer tracker on status widget
 [2026-07-04T18:05:07] - fix: handle user wallet rejection promise rejections
 [2026-07-04T18:06:07] - perf: debouncing window resize listener in layout manager
+[2026-07-04T18:07:07] - refactor: extract constants to configuration registry
