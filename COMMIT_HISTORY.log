@@ -154,3 +154,4 @@
 [2026-07-04T18:25:11] - fix: clear stale polling timeouts on wallet switch
 [2026-07-04T18:26:11] - perf: preload web fonts to reduce layouts shifts
 [2026-07-04T18:27:11] - refactor: standardize response shapes from contract service
+[2026-07-04T18:28:11] - style: apply premium glass shadow details to connect button
