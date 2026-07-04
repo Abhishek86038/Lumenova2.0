@@ -100,3 +100,4 @@
 [2026-07-04T17:31:00] - docs: update contribution guidelines in README
 [2026-07-04T17:32:01] - perf: optimize render loops in CampaignProgress
 [2026-07-04T17:33:01] - style: adjust padding on wallet connection buttons
+[2026-07-04T17:34:01] - feat: add event subscription polling on ledger close
