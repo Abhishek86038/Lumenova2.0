@@ -125,3 +125,4 @@
 [2026-07-04T17:56:05] - perf: improve background orb animation paint times
 [2026-07-04T17:57:05] - refactor: clean up React state initialization
 [2026-07-04T17:58:06] - style: apply Space Grotesk display fonts to header titles
+[2026-07-04T17:59:06] - feat: display sync status indicator during ledger check
