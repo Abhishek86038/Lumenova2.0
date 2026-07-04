@@ -181,3 +181,4 @@
 [2026-07-04T18:52:16] - chore: update dependency lock files to match latest
 [2026-07-04T18:53:16] - style: polish alert banners borders under input fields
 [2026-07-04T18:54:16] - feat: track total donor count state inside React flow
+[2026-07-04T18:55:16] - fix: handle zero-donation campaigns state rendering
