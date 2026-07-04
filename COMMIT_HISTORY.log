@@ -109,3 +109,4 @@
 [2026-07-04T17:40:02] - feat: add user-facing toast notifications for donation status
 [2026-07-04T17:41:02] - docs: append local development environment setup instructions
 [2026-07-04T17:42:02] - refactor: streamline transaction simulation payload
+[2026-07-04T17:43:03] - fix: prevent dual triggering of click handler in DonateForm
