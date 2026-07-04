@@ -149,3 +149,4 @@
 [2026-07-04T18:20:10] - fix: catch network failures during horizon node polling
 [2026-07-04T18:21:10] - docs: document getEvents API ledger limits and retries
 [2026-07-04T18:22:10] - chore: update project descriptions in package config
+[2026-07-04T18:23:10] - style: scale progress bar height for high-definition screens
